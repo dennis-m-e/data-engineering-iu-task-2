@@ -10,6 +10,8 @@ Imagine a municipality that has installed a large number of physical sensors acr
 
 This project's system is designed to simulate such a target environment and effectively handle large volumes of sensor data streams. Incoming data will be processed in near real-time and stored in a reliable, robust database, making it accessible for further analysis, anomaly detection, metric calculation, and more.
 
+### Technologies
+
 To accomplish this, the following proven technologies have been selected for their suitability in such use cases:
 
 1.  **Python**: Considered a go-to solution for data-intensive tasks and applications like this.
@@ -18,6 +20,8 @@ To accomplish this, the following proven technologies have been selected for the
 4.  **Docker + Docker Compose**: A perfect match for packaging and distributing this application in a multi-container setup.
 
 ![](docs/images/data_architecture.drawio.svg)
+
+### Dataset
 
 For simulating the continuous stream of sensor data, the Kaggle dataset [Air Quality and Pollution Assessment](https://www.kaggle.com/datasets/mujtabamatin/air-quality-and-pollution-assessment/data) is used, containing the following key features:
 
@@ -33,7 +37,9 @@ For simulating the continuous stream of sensor data, the Kaggle dataset [Air Qua
 
 The dataset is stored under [`data/sample_air_quality_pollution_data.csv`](data/sample_air_quality_pollution_data.csv) in this repository.
 
+### Kafka Topic
 
+For simplicity, each row of the dataset will be published to and read from one topic called `topic_air_quality_pollution_measurement`, no matter which sensor the data is coming from. For real-world usage, a dedicated topic structure is preferred, considering different dimensions like sensor type or area the sensor belongs to.
 
 ## Prerequisites
 
