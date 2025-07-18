@@ -19,6 +19,22 @@ To accomplish this, the following proven technologies have been selected for the
 
 ![](docs/images/data_architecture.drawio.svg)
 
+For simulating the continuous stream of sensor data, the Kaggle dataset [Air Quality and Pollution Assessment](https://www.kaggle.com/datasets/mujtabamatin/air-quality-and-pollution-assessment/data) is used, containing the following key features:
+
+- `Temperature (°C)`: Average temperature of the region.
+- `Humidity (%)`: Relative humidity recorded in the region.
+- `PM2.5 Concentration (µg/m³)`: Fine particulate matter levels.
+- `PM10 Concentration (µg/m³)`: Coarse particulate matter levels.
+- `NO2 Concentration (ppb)`: Nitrogen dioxide levels.
+- `SO2 Concentration (ppb)`: Sulfur dioxide levels.
+- `CO Concentration (ppm)`: Carbon monoxide levels.
+- `Proximity to Industrial Areas (km)`: Distance to the nearest industrial zone.
+- `Population Density (people/km²)`: Number of people per square kilometer in the region.
+
+The dataset is stored under [`data/sample_air_quality_pollution_data.csv`](data/sample_air_quality_pollution_data.csv) in this repository.
+
+
+
 ## Prerequisites
 
 To make use of the prepared resources and run the entire data system, the following dependencies are required:
