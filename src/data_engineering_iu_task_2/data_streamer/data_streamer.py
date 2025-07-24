@@ -9,8 +9,6 @@ from data_engineering_iu_task_2.data_streamer.kafka_producer import get_kafka_pr
 from data_engineering_iu_task_2.data_streamer.setup_streamer_logger import logger
 from data_engineering_iu_task_2.models import AirQualityPollutionData
 
-TimeIntervalSeconds = int | float  # Type alias for time interval in seconds
-
 
 class DataStreamer:
     """Simulates a data stream from a list of AirQualityPollutionData datasets with a given time interval and sends it to kafka."""
@@ -32,12 +30,7 @@ class DataStreamer:
         logger.info("New data streamer created")
 
     def run(self) -> None:
-        """Run data stream from the DataFrame.
-
-        Args:
-            interval (TimeIntervalSeconds, optional): Interval for simulating a stream of the static data. Defaults to 1.
-            is_infinite (bool, optional): Run in infinite loop and restart, when dataset is exhausted. Defaults to False.
-        """
+        """Run data stream from the DataFrame."""
 
         logger.info(f"Start streaming data to topic {self._config.kafka.topic_name}")
         logger.info(f"Mode: {'infinite' if self._config.streamer.is_infinite else 'one-time'}")
