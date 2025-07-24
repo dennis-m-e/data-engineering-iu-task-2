@@ -144,7 +144,7 @@ Assuming all mentioned prerequisites are covered, you can start using the applic
 cd <path/to/your/desired/directory> && git clone https://github.com/dennis-m-e/data-engineering-iu-task-2.git
 ```
 
-2) Start the system via docker compose from the same terminal. Please note that the startup procedure can take up to two minutes!
+2) Start the system via docker compose from the same terminal. Please note that the startup procedure can take some time and you might have to wait a few minutes until data appears in the MongoDB!
 
 ```bash
 cd data-engineering-iu-task-2 && docker compose up --build
