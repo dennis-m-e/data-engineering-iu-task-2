@@ -14,5 +14,5 @@ database:
 
 app:
   logs:
-    folder: /tmp # make sure this folder exists
+    folder: /tmp # folder inside the container where the logs shall be stored - make sure this matches the settings in the docker compose file
     filemode: w # "a" for append, "w" for overwrite
