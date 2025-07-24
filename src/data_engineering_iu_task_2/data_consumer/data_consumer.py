@@ -32,12 +32,7 @@ class DataConsumer:
         logger.info("New data consumer created")
 
     def run(self) -> None:
-        """Run data stream from the DataFrame.
-
-        Args:
-            interval (TimeIntervalSeconds, optional): Interval for simulating a stream of the static data. Defaults to 1.
-            is_infinite (bool, optional): Run in infinite loop and restart, when dataset is exhausted. Defaults to False.
-        """
+        """Run data consumption and database loading"""
         logger.info(f"Start consuming messages from {self._config.kafka.topic_name}")
 
         for index, message in enumerate(self._consumer):

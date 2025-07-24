@@ -20,7 +20,9 @@ class KafkaConfig(BaseModel):
 
 
 class StreamerConfig(BaseModel):
-    interval: float = Field(default=2.0, description="Interval in seconds for streaming data")
+    interval_in_seconds: float = Field(
+        default=2.0, description="Interval in seconds for streaming data"
+    )
     is_infinite: bool = Field(default=False, description="Run the streamer in an infinite loop")
 
 

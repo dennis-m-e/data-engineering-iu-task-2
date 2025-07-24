@@ -34,7 +34,7 @@ class DataStreamer:
 
         logger.info(f"Start streaming data to topic {self._config.kafka.topic_name}")
         logger.info(f"Mode: {'infinite' if self._config.streamer.is_infinite else 'one-time'}")
-        logger.info(f"Interval: {self._config.streamer.interval} seconds")
+        logger.info(f"Interval: {self._config.streamer.interval_in_seconds} seconds")
 
         while True:
             for index, entry in enumerate(self._data):
@@ -52,7 +52,7 @@ class DataStreamer:
                 except Exception as e:
                     logger.error(f"Failed to send data to Kafka: {e}")
 
-                time.sleep(self._config.streamer.interval)
+                time.sleep(self._config.streamer.interval_in_seconds)
 
             logger.info(
                 "Data stream completed. Restarting..."

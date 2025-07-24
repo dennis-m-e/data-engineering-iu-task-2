@@ -3,7 +3,7 @@ kafka:
   bootstrap_servers: kafka:9092 # Kafka broker address
 
 streamer:
-  interval: 2.0 # Interval in seconds for the data streamer to fetch new data
+  interval_in_seconds: 2.0 # Interval in seconds for the data streamer to fetch new data
   is_infinite: false # If true, the streamer will run indefinitely; if false, it will stop after fetching data once
 
 database:
