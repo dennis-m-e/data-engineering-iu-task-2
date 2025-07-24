@@ -17,4 +17,5 @@ def get_kafka_consumer(topic: str, bootstrap_server: str = "kafka:9092") -> Kafk
         topic,
         bootstrap_servers=bootstrap_server,
         value_deserializer=lambda m: json.loads(m.decode("utf-8")) if m else None,
+        auto_offset_reset="earliest",
     )

@@ -58,8 +58,8 @@ services:
         condition: service_started
       producer:
         condition: service_started
-      # kafka:
-      #   condition: service_started
+      kafka:
+        condition: service_started
     volumes:
       - /tmp:/tmp # Persist consumer logs - adapt as needed
     networks:
