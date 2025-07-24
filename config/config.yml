@@ -1,0 +1,18 @@
+kafka:
+  topic_name: topic_air_quality_pollution_data # Name of the Kafka topic to which the producer will send data
+  bootstrap_servers: kafka:9092 # Kafka broker address
+
+streamer:
+  interval: 2.0 # Interval in seconds for the data streamer to fetch new data
+  is_infinite: false # If true, the streamer will run indefinitely; if false, it will stop after fetching data once
+
+database:
+  host: mongodb # Hostname of the MongoDB server
+  port: 27017 # Port on which MongoDB is running
+  name: air_quality_pollution_db # Name of the MongoDB database
+  collection_name: air_quality_pollution_data # Name of the MongoDB collection where data will be stored
+
+app:
+  logs:
+    folder: /tmp # make sure this folder exists
+    filemode: w # "a" for append, "w" for overwrite

@@ -41,6 +41,22 @@ The dataset is stored under [`data/sample_air_quality_pollution_data.csv`](data/
 
 For simplicity, each row of the dataset will be published to and read from one topic called `topic_air_quality_pollution_measurement`, no matter which sensor the data is coming from. For real-world usage, a dedicated topic structure is preferred, considering different dimensions like sensor type or area the sensor belongs to.
 
+### Architecture
+
+Why pydantic?
+Where are the logs? 
+Make data persistent
+configuration of application
+
+### Implementation
+
+
+
+### Improvements
+
+proper security for database (accounts)
+add persistency for kafka & mongodb
+
 ## Prerequisites
 
 To make use of the prepared resources and run the entire data system, the following dependencies are required:
