@@ -3,7 +3,9 @@ import json
 from kafka import KafkaConsumer
 
 
-def get_kafka_consumer(topic: str, bootstrap_server: str = "kafka:9092") -> KafkaConsumer:
+def get_kafka_consumer(
+    topic: str, bootstrap_server: str = "kafka:9092"
+) -> KafkaConsumer:
     """Get a Kafka consumer instance.
 
     Args:
@@ -19,4 +21,6 @@ def get_kafka_consumer(topic: str, bootstrap_server: str = "kafka:9092") -> Kafk
         value_deserializer=lambda m: json.loads(m.decode("utf-8")) if m else None,
         auto_offset_reset="earliest",
         allow_auto_create_topics=True,
+        fetch_max_wait_ms=0,
+        group_id="my-group",
     )

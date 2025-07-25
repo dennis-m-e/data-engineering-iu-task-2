@@ -10,7 +10,9 @@ DEFAULT_FILENAME: str = "sample_air_quality_pollution_data.csv"
 """Default filename for the sample dataset."""
 
 DEFAULT_FILEPATH: Path = (
-    Path(__file__).parent.parent.parent.parent.joinpath("data").joinpath(DEFAULT_FILENAME)
+    Path(__file__)
+    .parent.parent.parent.parent.joinpath("data")
+    .joinpath(DEFAULT_FILENAME)
 )
 """Default file path for the sample dataset."""
 
@@ -82,7 +84,9 @@ def rename_column(data: pd.DataFrame, old_name: str, new_name: str) -> pd.DataFr
     return data
 
 
-def load_sample_dataset(filepath: Path = DEFAULT_FILEPATH) -> list[AirQualityPollutionData]:
+def load_sample_dataset(
+    filepath: Path = DEFAULT_FILEPATH,
+) -> list[AirQualityPollutionData]:
     """Load a sample dataset from a CSV file and prepare it for streaming.
 
     Args:

@@ -33,7 +33,9 @@ class DataStreamer:
         """Run data stream from the DataFrame."""
 
         logger.info(f"Start streaming data to topic {self._config.kafka.topic_name}")
-        logger.info(f"Mode: {'infinite' if self._config.streamer.is_infinite else 'one-time'}")
+        logger.info(
+            f"Mode: {'infinite' if self._config.streamer.is_infinite else 'one-time'}"
+        )
         logger.info(f"Interval: {self._config.streamer.interval_in_seconds} seconds")
 
         while True:

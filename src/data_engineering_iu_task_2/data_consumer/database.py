@@ -76,9 +76,13 @@ class DatabaseClient:
             )
             return result.inserted_id
         except Exception as e:
-            logger.error(f"Failed to insert data into collection {collection_name}: {e}")
+            logger.error(
+                f"Failed to insert data into collection {collection_name}: {e}"
+            )
 
-    def insert_many(self, collection_name: str, data: list[dict[str, Any]]) -> list[Any] | None:
+    def insert_many(
+        self, collection_name: str, data: list[dict[str, Any]]
+    ) -> list[Any] | None:
         """Inserts multiple datasets into the specified collection
 
         Args:
@@ -98,7 +102,9 @@ class DatabaseClient:
             return result.inserted_ids
 
         except Exception as e:
-            logger.error(f"Failed to insert data into collection {collection_name}: {e}")
+            logger.error(
+                f"Failed to insert data into collection {collection_name}: {e}"
+            )
 
     def close(self) -> None:
         """Close database client connection"""

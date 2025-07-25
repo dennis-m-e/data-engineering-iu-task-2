@@ -23,7 +23,9 @@ class StreamerConfig(BaseModel):
     interval_in_seconds: float = Field(
         default=2.0, description="Interval in seconds for streaming data"
     )
-    is_infinite: bool = Field(default=False, description="Run the streamer in an infinite loop")
+    is_infinite: bool = Field(
+        default=False, description="Run the streamer in an infinite loop"
+    )
 
 
 class DatabaseConfig(BaseModel):
@@ -39,7 +41,8 @@ class DatabaseConfig(BaseModel):
 class LogsConfig(BaseModel):
     folder: str = Field(default="/tmp", description="Folder where logs will be stored")
     filemode: str = Field(
-        default="w", description="File mode for log files ('a' for append, 'w' for overwrite)"
+        default="w",
+        description="File mode for log files ('a' for append, 'w' for overwrite)",
     )
 
 

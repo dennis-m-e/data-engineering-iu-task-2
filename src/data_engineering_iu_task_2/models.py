@@ -17,7 +17,8 @@ class AirQualityPollutionData(BaseModel):
         ..., description="Fine particulate matter levels in micrograms per cubic meter"
     )
     pm_10: float = Field(
-        ..., description="Coarse particulate matter levels in micrograms per cubic meter"
+        ...,
+        description="Coarse particulate matter levels in micrograms per cubic meter",
     )
     no_2: float = Field(..., description="Nitrogen dioxide levels in parts per billion")
     so_2: float = Field(..., description="Sulfur dioxide levels in parts per billion")
