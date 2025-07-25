@@ -159,3 +159,11 @@ cat /tmp/{timestamp}_{component-name}.log
 4) Check the MongoDB data by means of MongoDB Compass (installation required). You can open the client application and connect to the database on `localhost:27017` (port is forwarded).
 
 5) In case you want to shut the application again, press `Ctrl+C` and run `docker compose down` afterwards.
+
+### Run tests
+
+In order to run the unit tests, stored under [**`tests/`**](tests/), you have to execute the following command
+
+```bash
+uv run pytest . -v
+```
