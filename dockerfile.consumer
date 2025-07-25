@@ -1,0 +1,17 @@
+FROM python:3.10-slim-bookworm
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file and install dependencies
+COPY src/ src/
+COPY data/ data/
+COPY pyproject.toml .
+COPY config/ config/
+COPY README.md .
+
+RUN uv python pin 3.10
+
+# Command to run the producer script
+CMD ["uv", "run", "src/data_engineering_iu_task_2/data_consumer/data_consumer.py"]
