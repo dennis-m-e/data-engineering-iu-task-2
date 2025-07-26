@@ -1,6 +1,7 @@
 kafka:
   topic_name: topic_air_quality_pollution_data # Name of the Kafka topic to which the producer will send data
-  bootstrap_servers: kafka:9092 # Kafka broker address
+  bootstrap_servers: kafka # Kafka broker
+  port: 9092 # Port on which the Kafka broker is running
 
 streamer:
   interval_in_seconds: 2.0 # Interval in seconds for the data streamer to fetch new data

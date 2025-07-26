@@ -14,18 +14,15 @@ class KafkaConfig(BaseModel):
         default="topic_air_quality_pollution_data",
         description="Kafka topic name for data streaming",
     )
-    kafka_bootstrap_servers: str = Field(
-        default="kafka:9092", description="Kafka bootstrap servers"
-    )
+    bootstrap_servers: str = Field(default="kafka", description="Kafka bootstrap servers")
+    port: int = Field(default=9092, description="Port on which the Kafka broker is running")
 
 
 class StreamerConfig(BaseModel):
     interval_in_seconds: float = Field(
         default=2.0, description="Interval in seconds for streaming data"
     )
-    is_infinite: bool = Field(
-        default=False, description="Run the streamer in an infinite loop"
-    )
+    is_infinite: bool = Field(default=False, description="Run the streamer in an infinite loop")
 
 
 class DatabaseConfig(BaseModel):

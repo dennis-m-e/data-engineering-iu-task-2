@@ -24,7 +24,10 @@ class DataStreamer:
         self._config: Config = config
         """Configuration for the data streamer"""
 
-        self._producer: KafkaProducer = get_kafka_producer()
+        self._producer: KafkaProducer = get_kafka_producer(
+            self._config.kafka.bootstrap_servers,
+            self._config.kafka.port,
+        )
         """Kafka producer for sending data to the configured Kafka topic."""
 
         logger.info("New data streamer created")
@@ -33,9 +36,7 @@ class DataStreamer:
         """Run data stream from the DataFrame."""
 
         logger.info(f"Start streaming data to topic {self._config.kafka.topic_name}")
-        logger.info(
-            f"Mode: {'infinite' if self._config.streamer.is_infinite else 'one-time'}"
-        )
+        logger.info(f"Mode: {'infinite' if self._config.streamer.is_infinite else 'one-time'}")
         logger.info(f"Interval: {self._config.streamer.interval_in_seconds} seconds")
 
         while True:

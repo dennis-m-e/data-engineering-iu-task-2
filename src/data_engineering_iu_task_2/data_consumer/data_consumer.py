@@ -20,7 +20,9 @@ class DataConsumer:
         """Configuration for the data streamer"""
 
         self._consumer: KafkaConsumer = get_kafka_consumer(
-            self._config.kafka.topic_name
+            self._config.kafka.topic_name,
+            self._config.kafka.bootstrap_servers,
+            self._config.kafka.port,
         )
         """Kafka producer for sending data to the configured Kafka topic."""
 
@@ -39,9 +41,7 @@ class DataConsumer:
 
         for index, message in enumerate(self._consumer):
             # check whether received data corresponds to expected format/model
-            data: AirQualityPollutionData = AirQualityPollutionData.model_validate(
-                message.value
-            )
+            data: AirQualityPollutionData = AirQualityPollutionData.model_validate(message.value)
             logger.info(
                 f"Received new message. Data converted successfully to {AirQualityPollutionData.__name__}"
             )
