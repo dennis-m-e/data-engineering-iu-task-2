@@ -25,7 +25,7 @@ class DataStreamer:
         """Configuration for the data streamer"""
 
         self._producer: KafkaProducer = get_kafka_producer(
-            self._config.kafka.bootstrap_server,
+            self._config.kafka.bootstrap_servers,
             self._config.kafka.port,
         )
         """Kafka producer for sending data to the configured Kafka topic."""

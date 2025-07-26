@@ -21,7 +21,7 @@ class DataConsumer:
 
         self._consumer: KafkaConsumer = get_kafka_consumer(
             self._config.kafka.topic_name,
-            self._config.kafka.bootstrap_server,
+            self._config.kafka.bootstrap_servers,
             self._config.kafka.port,
         )
         """Kafka producer for sending data to the configured Kafka topic."""
