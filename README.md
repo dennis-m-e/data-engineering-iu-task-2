@@ -59,7 +59,7 @@ This component is based on the image `python:3.10-slim-bookworm` as well and is 
 
 #### MongoDB
 
-For this component, the official `mongo` image is used without any particular changes. For accessibility of the stored data, the MongoDB default port `27017` is exposed and forwarded to the host system. Accessing the data can be done via the client application MongoDB Compass. Find more information on the [**official website**](https://www.mongodb.com/products/tools/compass).  
+For this component, the official `mongo` image is used without any particular changes. For accessibility of the stored data, the MongoDB default port `27017` is exposed and forwarded to the host system. Accessing the data can be done via the client application MongoDB Compass. Find more information on the [**official website**](https://www.mongodb.com/products/tools/compass). Use `mongodb://localhost:27017` as a connection string to start the communication (only valid for default values!).
 
 ### Deployment
 
