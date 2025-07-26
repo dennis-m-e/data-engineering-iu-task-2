@@ -59,11 +59,11 @@ This component is based on the image `python:3.10-slim-bookworm` as well and is 
 
 #### MongoDB
 
-For this component, the official `mongo` image is used without any particular changes. For accessibility of the stored data, the mongo default port `27017` is exposed and forwarded to the host system. Accessing the data can be done via the client application MongoDB Compass. Find more information on the [**official website**](https://www.mongodb.com/products/tools/compass).  
+For this component, the official `mongo` image is used without any particular changes. For accessibility of the stored data, the MongoDB default port `27017` is exposed and forwarded to the host system. Accessing the data can be done via the client application MongoDB Compass. Find more information on the [**official website**](https://www.mongodb.com/products/tools/compass).  
 
 ### Deployment
 
-In order to ensure reusability and robustness, the application is managed and deployed via docker compose. All containers are hosted in the same bridge network called `app-network`. Only port `27017` of the `mongo` service is forwarded, such that one can access the database from outside (e.g. via [**MongoDB Compass**](https://www.mongodb.com/products/tools/compass) or the MongoDB VS Code extension). Other than that, the folder `/tmp` of all containers is mounted to the host folder of the same name `/tmp` (please make sure this folder exists on the host system!). If kept like this, logs can be found under `/tmp` on the host system (format: {timestamp}_{component}.log). 
+In order to ensure reusability and robustness, the application is managed and deployed via docker compose. All containers are hosted in the same bridge network called `app-network`. Only port `27017` of the `mongodb` service is forwarded, such that one can access the database from outside (e.g. via [**MongoDB Compass**](https://www.mongodb.com/products/tools/compass) or the MongoDB VS Code extension). Other than that, the folder `/tmp` of all containers is mounted to the host folder of the same name `/tmp` (please make sure this folder exists on the host system!). If kept like this, logs can be found under `/tmp` on the host system (format: {timestamp}_{component}.log). 
 
 Optionally, the `/data/db` folder of the `mongo` container can be mounted to one existing on the host system in order to pertain the data between individual system runs (see docker compose file in the respective section). If not mounted, the data will be gone after a restart via docker compose.
 
