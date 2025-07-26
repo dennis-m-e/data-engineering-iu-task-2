@@ -37,7 +37,7 @@ The dataset is stored under [`data/sample_air_quality_pollution_data.csv`](data/
 
 ### Kafka Topic
 
-For simplicity, each row of the dataset will be published to and read from one topic called `topic_air_quality_pollution_measurement`, no matter which sensor the data is coming from. For real-world usage, a dedicated topic structure is preferred, considering different dimensions like sensor type or area the sensor belongs to.
+For simplicity, each row of the dataset will be published to and read from one topic called `topic_air_quality_pollution_data`, no matter which sensor the data is coming from. For real-world usage, a dedicated topic structure is preferred, considering different dimensions like sensor type or area the sensor belongs to.
 
 ### Architecture
 
@@ -83,7 +83,8 @@ The file for changing some of the most important application parameters is store
 ```yaml
 kafka:
   topic_name: topic_air_quality_pollution_data # Name of the Kafka topic to which the producer will send data
-  bootstrap_servers: kafka:9092 # Kafka broker address
+  bootstrap_servers: kafka # Kafka broker
+  port: 9092 # Port on which the Kafka broker is running
 
 streamer:
   interval_in_seconds: 2.0 # Interval in seconds for the data streamer to fetch new data
@@ -99,6 +100,7 @@ app:
   logs:
     folder: /tmp # folder inside the container where the logs shall be stored - make sure this matches the settings in the docker compose file
     filemode: w # "a" for append, "w" for overwrite
+
 ```
 
 If further configuration parameters are needed, they must be implemented in the `pydantic` [**data model for the configuration**](src/data_engineering_iu_task_2/config.py) as well.
@@ -167,3 +169,16 @@ In order to run the unit tests, stored under [**`tests/`**](tests/), you have to
 ```bash
 uv run pytest . -v
 ```
+
+## Troubleshooting
+
+### Container already in use
+
+If you end up with an error like the following 
+
+```bash
+Error response from daemon: Conflict. The container name <container-name> is already in use by container ...
+```
+
+after running `docker compose up --build`, you might have to run `docker compose down && docker container prune` from the root of the repository.  
+
