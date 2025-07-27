@@ -1,4 +1,27 @@
 # Data Engineering Project - Task 2
+- [TL;DR](#tldr)
+- [About](#about)
+  - [Technologies](#technologies)
+  - [Dataset](#dataset)
+  - [Kafka Topic](#kafka-topic)
+  - [Architecture](#architecture)
+    - [Data streamer](#data-streamer)
+    - [Kafka broker](#kafka-broker)
+    - [Data consumer](#data-consumer)
+    - [MongoDB](#mongodb)
+  - [Deployment](#deployment)
+  - [Design descisions](#design-descisions)
+    - [`pydantic`](#pydantic)
+    - [Type annotations](#type-annotations)
+  - [Configuration](#configuration)
+  - [Implementation](#implementation)
+  - [Improvements](#improvements)
+- [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+  - [Run tests](#run-tests)
+- [Troubleshooting](#troubleshooting)
+  - [Container already in use](#container-already-in-use)
 
 ## TL;DR
 
