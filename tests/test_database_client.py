@@ -65,72 +65,47 @@ def test_create_client_without_auth() -> None:
 
 
 def test_insert_one_success(mock_mongo_client: Any) -> None:
-    """Test successful insertion of a single document.
-
-    Args:
-        mock_mongo_client (Any): Mock MongoDB client
-    """
+    """Test successful insertion of a single document."""
     client: DatabaseClient = DatabaseClient(DATABASE_NAME)
     collection: MagicMock = MagicMock()
-
     client._database = {"col": collection}
     collection.insert_one.return_value.inserted_id = "id1"
-
     result = client.insert_one("col", {"a": 1})
     assert result == "id1"
 
 
 def test_insert_one_failure(mock_mongo_client: Any) -> None:
-    """Test failure of inserting a single document.
-
-    Args:
-        mock_mongo_client (Any): Mock MongoDB client
-    """
+    """Test failure of inserting a single document."""
     client: DatabaseClient = DatabaseClient(DATABASE_NAME)
     collection: MagicMock = MagicMock()
-
     client._database = {"col": collection}
     collection.insert_one.side_effect = Exception("fail")
-
-    result = client.insert_one("col", {"a": 1})
-    assert result is None
-
-
-def test_insert_many_success(mock_mongo_client: Any) -> None:
-    """Test successful insertion of multiple documents.
-
-    Args:
-        mock_mongo_client (Any): Mock MongoDB client
-    """
-    client: DatabaseClient = DatabaseClient(DATABASE_NAME)
-    collection = MagicMock()
-
-    client._database = {"col": collection}
-    collection.insert_many.return_value.inserted_ids = ["id1", "id2"]
-
-    result = client.insert_many("col", [{"a": 1}, {"b": 2}])
-    assert result == ["id1", "id2"]
+    with pytest.raises(Exception, match="fail"):
+        client.insert_one("col", {"a": 1})
 
 
-def test_insert_many_failure(mock_mongo_client: Any) -> None:
-    """Test failure of inserting multiple documents.
-
-    Args:
-        mock_mongo_client (Any): Mock MongoDB client
-    """
+def test_find_one_found(mock_mongo_client: Any) -> None:
+    """Test finding a document that exists."""
     client: DatabaseClient = DatabaseClient(DATABASE_NAME)
     collection: MagicMock = MagicMock()
-
     client._database = {"col": collection}
-    collection.insert_many.side_effect = Exception("fail")
+    collection.find_one.return_value = {"_id": "id1", "a": 1}
+    result = client.find_one("col", {"a": 1})
+    assert result == {"_id": "id1", "a": 1}
 
-    result = client.insert_many("col", [{"a": 1}])
+
+def test_find_one_not_found(mock_mongo_client: Any) -> None:
+    """Test finding a document that does not exist."""
+    client: DatabaseClient = DatabaseClient(DATABASE_NAME)
+    collection: MagicMock = MagicMock()
+    client._database = {"col": collection}
+    collection.find_one.return_value = None
+    result = client.find_one("col", {"a": 2})
     assert result is None
 
 
 def test_close(mock_mongo_client: Any) -> None:
     client: DatabaseClient = DatabaseClient(DATABASE_NAME)
     client._client = MagicMock()
-
     client.close()
     client._client.close.assert_called_once()
