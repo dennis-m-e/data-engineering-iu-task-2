@@ -40,18 +40,43 @@ class DataConsumer:
         logger.info(f"Start consuming messages from {self._config.kafka.topic_name}")
 
         for index, message in enumerate(self._consumer):
-            # check whether received data corresponds to expected format/model
-            data: AirQualityPollutionData = AirQualityPollutionData.model_validate(message.value)
+            data: dict[Any, Any] = message.value
+
+            # check whether received data corresponds to expected format/model - keep dictionary format though
+            AirQualityPollutionData.model_validate(data)
             logger.info(
-                f"Received new message. Data converted successfully to {AirQualityPollutionData.__name__}"
+                "Received new message. Data validated successfully"
+                f" against {AirQualityPollutionData.__name__}"
             )
 
-            inserted_id: Any = self._database_client.insert_one(
-                self._config.database.collection_name, data.model_dump()
-            )
-            logger.info(
-                f"Message #{index} written to database with id {inserted_id}: {data.model_dump()}"
-            )
+            # store message offset also for ensuring idempotency
+            data["message_offset"] = message.offset
+
+            try:
+                result: dict[Any, Any] | None = self._database_client.find_one(
+                    self._config.database.collection_name,
+                    {"message_offset": message.offset},
+                )
+
+                # skip database insert if message offset exists already - avoid duplication
+                if result:
+                    logger.info(
+                        f"Message #{index} (offset: {message.offset})"
+                        f" already exists in database: {data} - skip!"
+                    )
+                    continue
+
+                inserted_id: Any = self._database_client.insert_one(
+                    self._config.database.collection_name,
+                    data,
+                )
+
+                # Manually commit the offset after successful processing - no commit in case of database write failure!
+                self._consumer.commit()
+                logger.info(f"Message #{index} written to database with id {inserted_id}: {data}")
+
+            except Exception:
+                logger.error(f"Failed to retrieve or insert message #{index}")
 
 
 if __name__ == "__main__":
