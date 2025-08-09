@@ -155,7 +155,7 @@ Some tests (just for demonstration - not all code is covered!) can be found unde
 
 ### Failure handling
 
-In order to make such a data system failure safe, different aspects needs to be covered properly. It is not enough to just use recovery mechanisms of the integrated third-party frameworks. Also the client code serving as the glue between components needs to adhere to best practices and act accordingly. So, both the frameworks needs to be setup in a proper way but also the client code must handle outages or unavailability of the involved services properly. Data loss and inconsistency is a symptom of unsafe data landscapes without proper failure strategy.
+In order to make such a data system failure safe, different aspects needs to be covered properly. It is not enough to just use recovery mechanisms of the integrated third-party frameworks. Also the client code serving as the glue between components needs to adhere to best practices and act accordingly. So, both the frameworks and the client code must handle outages or unavailability of the involved services properly. Data loss and inconsistency is a symptom of unsafe data landscapes without proper failure strategy.
 
 Potential reasons for failure are
 
