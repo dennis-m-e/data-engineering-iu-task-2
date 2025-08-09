@@ -209,7 +209,8 @@ A possible scenario:
 1.  Consumer reads from Kafka topic
 2.  Consumer processes data
 3.  Consumer writes to database
-4.  Consumer acknowledges by committing the offset -> if not committed, the message can be re-read.
+4.  Consumer acknowledges by committing the offset (manually) -> if not committed, the message can be re-read.
+
 
 ##### Retry Mechanism
 
