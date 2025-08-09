@@ -20,7 +20,7 @@ def get_new_file_logger(
 
     custom_logger = logging.getLogger(name)
     logging.basicConfig(
-        format="[%(asctime)s] - %(filename)s - %(levelname)s - %(message)s",
+        format="[%(asctime)s] - %(levelname)s - %(filename)s - %(message)s",
         style="%",
         datefmt="%Y-%m-%d %H:%M:%S",
         level=level,

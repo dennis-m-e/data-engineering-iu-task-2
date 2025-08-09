@@ -16,4 +16,7 @@ def get_kafka_producer(bootstrap_servers: str = "kafka", port: int = 9092) -> Ka
     return KafkaProducer(
         bootstrap_servers=f"{bootstrap_servers}:{port}",
         value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+        retries=5,
+        acks="all",
+        retry_backoff_ms=100,
     )

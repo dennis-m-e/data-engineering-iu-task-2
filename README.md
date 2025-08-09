@@ -15,6 +15,22 @@
     - [Type annotations](#type-annotations)
   - [Configuration](#configuration)
   - [Implementation](#implementation)
+  - [Failure Handling](#failure-handling)
+    - [Kafka](#kafka)
+      - [Retention Policy](#retention-policy)
+      - [Consumer Offsets](#consumer-offsets)
+      - [Partitioning and Replication](#partitioning-and-replication)
+    - [MongoDB](#mongodb-1)
+      - [ACID Guarantee](#acid-guarantee)
+      - [Sharding](#sharding)
+      - [Replica Sets](#replica-sets)
+    - [Application Code](#application-code)
+      - [Acknowledgement](#acknowledgement)
+      - [Retry Mechanism](#retry-mechanism)
+      - [Error Handling](#error-handling)
+      - [Idempotency](#idempotency)
+    - [General](#general)
+      - [Logging and Monitoring](#logging-and-monitoring)
   - [Improvements](#improvements)
 - [Getting started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -138,6 +154,87 @@ The implementation of the system is separated into two different modules (`data_
 
 Some tests (just for demonstration - not all code is covered!) can be found under [**`tests/`**](tests/).
 
+### Failure Handling
+
+To make a data system failure-safe, different aspects need to be properly covered. It is not enough to just use recovery mechanisms of integrated third-party frameworks. The client code serving as the glue between components also needs to adhere to best practices and act accordingly. Therefore, both the frameworks and the client code must handle outages or unavailability of the involved services properly. Data loss and inconsistency are symptoms of unsafe data landscapes without a proper failure strategy.
+
+Potential reasons for failure in this system are:
+
+*   Kafka Broker goes down
+*   MongoDB not available
+*   Write operation in database fails
+*   Outage of individual or multiple components (application code like *data_streamer* or *data_consumer*)
+*   etc.
+
+Below is a description of the **most important** individual features and approaches, which are essential to build a robust architecture with the given components. However, further measures are possible and sometimes required.
+
+> Please note: The implementation and configuration of all these concepts exceeds the scope of this project and will only be covered on a theoretical level.
+
+#### Kafka
+
+##### Retention Policy
+
+Configuring a well-thought-out and suitable retention time for Kafka messages is essential. It ensures that data is retained for a certain period and does not need to be consumed in real-time. Even in case of failures, data can be reread as long as the retention period lasts.
+
+##### Consumer Offsets
+
+The fact that Kafka allows for asynchronous reading, combined with a proper retention period, enables consumers to pick up reading messages where they left off in case of a potential crash. This approach is possible because consumer offsets are maintained for each consumer group, tracking their progress within topics.
+
+##### Partitioning and Replication
+
+Fault tolerance is also achieved by concepts like partitioning and replication. Each data point is stored not only once in the cluster but in multiple partitions on several brokers, where one acts as the leader broker and all the others (number depends on replication factor) as followers (the same applies for partitions within a topic). In case of failure of individual brokers, data remains available and consistent across the remaining replicated partitions. If a failed broker was the leader for a particular partition, one of its followers will be elected to take over this role.
+
+#### MongoDB
+
+##### ACID Guarantee
+
+In general, MongoDB is ACID compliant, meaning that transactions are atomic, consistent, isolated, and durable. This by itself already provides a certain degree of failure safety.
+
+##### Sharding
+
+MongoDB supports a concept called sharding. It's a way of distributing data across multiple machines or shards, which can improve scalability and allows for partial communication with the database even if some shards are not available.
+
+##### Replica Sets
+
+Similar to what Kafka offers with replication factors, one can make use of replica sets in MongoDB. Utilizing this feature will result in the replication of data across multiple physical instances. The concept of primary vs. secondary is comparable to leaders and followers in Kafka.
+
+#### Application Code
+
+##### Acknowledgement
+
+Similar to network protocols like TCP and UDP, there are different ways to communicate with a data system like Kafka. Following a fire-and-forget approach, e.g., on the producer side, might result in data loss, since the producer will never know whether the transport of a message was successful or not. Acknowledgment on both the producer and consumer side is an effective way of coping with that, as both parties are aware of the transport result and can act accordingly. Thus, applying this is crucial to achieve a high degree of reliability and availability.
+
+A possible scenario:
+
+1.  Consumer reads from Kafka topic
+2.  Consumer processes data
+3.  Consumer writes to database
+4.  Consumer acknowledges by committing the offset (manually) -> if not committed, the message can be re-read.
+
+
+##### Retry Mechanism
+
+Retry mechanisms allow for bridging temporary outages of services like Kafka and are important, especially in combination with the acknowledgment concept. Assuming that a message has not been transmitted successfully on the first try, the client code could attempt to repeat for a predefined number of times, which reduces the possibility that data gets lost. Following this method is considered a passive behavior of the code.
+
+##### Error Handling
+
+Error handling is tightly coupled with retry mechanisms, as they come into play whenever the system or parts of it don't act as expected. However, error handling has a broader range and must cover cases where a simple retry doesn't lead to the resolution of the issue. For instance, if a service is still not available after the maximum number of retries, a potential error handling strategy could be to temporarily store the message in an intermediate cache and come back to it after a certain period, when the system is reachable again. Alternatively, messages could always be stored first in a local cache or queue (e.g. Dead-Letter Queues) before any communication with Kafka takes place. Once the transmit has been successful, the item can be removed from the cache, local storage or queue.
+
+##### Idempotency
+
+When dealing with distributed systems and the necessity of retries (as discussed above), ensuring idempotency in data processing and storage is paramount. Idempotency means that an operation can be performed multiple times without changing the result beyond the initial application. This is crucial to prevent duplicate data entries or incorrect state changes, especially when messages might be delivered and processed more than once due to network issues, application restarts, or retries ("at-least-once" delivery).
+
+- **Without idempotency:** If the consumer successfully writes to MongoDB but crashes before committing its Kafka offset, Kafka will re-deliver the message. The consumer, upon restart, will process and write the data again, leading to a duplicate entry in MongoDB.
+    
+- **With idempotency:** The consumer can design its database write operation to be idempotent. This might involve using a unique identifier from the Kafka message (e.g., a message ID or a business key) as part of the MongoDB document's primary key or a unique index. If the consumer attempts to write the same data again, MongoDB will either recognize the existing entry and perform an update (if the intention is to upsert) or reject the duplicate insertion, thus preventing data inconsistency.
+
+
+#### General
+
+##### Logging and Monitoring
+
+Systems are useless without experienced administrators and operators. To provide them with as much insight as possible and allow for fast intervention in case of failures, logging and monitoring are a must-have. Sending alerts in critical cases can significantly speed up the process for fixing bugs and resolving issues.
+
 ### Improvements
 
 As this application serves as an exemplary implementation to showcase the capabilities of data frameworks like Kafka or MongoDB, it is far from complete or perfect. Hence, there are several improvements, which are worth to be considered, if such a data system would be used in in the real-world, as described above. See a three examples below:
@@ -145,6 +242,7 @@ As this application serves as an exemplary implementation to showcase the capabi
 - **Database security**: In order to make sure data can only be accessed by certain people, proper security and user accounts should be prepared.
 - **Automated deployment**: Docker compose is already a nice way to manage a multi-container application. However, in production a proper release strategy and the respective CI system is needed in order to bring code reliable and fast into the target environment.
 - **Container Orchestration**: For such a simulated use case, it is enough to have a small setup like this. However, in production the amount of data can be huge and varies heavily over time. Container orchestration (e.g. with Kubernetes) would be a good way to scale such an application in a robust way and even handle peaks properly by adding or removing additional container instances fast.
+- **Failure Handling**: In order to make the data system robust and ensure high reliability and availability, proper failure handling is crucial. A few of the most common and important concepts are described above in the chapter [**Failure Handling**](#failure-handling).
 
 ## Getting started
 

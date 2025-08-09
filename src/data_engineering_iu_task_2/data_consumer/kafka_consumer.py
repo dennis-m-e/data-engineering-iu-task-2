@@ -20,8 +20,9 @@ def get_kafka_consumer(
         topic,
         bootstrap_servers=f"{bootstrap_servers}:{port}",
         value_deserializer=lambda m: json.loads(m.decode("utf-8")) if m else None,
+        enable_auto_commit=False,
         auto_offset_reset="earliest",
         allow_auto_create_topics=True,
         fetch_max_wait_ms=0,
-        group_id="my-group",
+        group_id="kafka-consumer-iu",
     )
