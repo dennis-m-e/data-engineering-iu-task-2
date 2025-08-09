@@ -204,7 +204,7 @@ The concept of primary vs. secondary is comparable to leaders and followers in K
 
 ##### Acknowledgement
 
-Similar to network protocols like TCP and UDP, there are different ways to communicate with a data system like Kafka. Following a fire-and-forget approach e.g. on the producer side, might result in a data loss, since the producer will never know whether the transport of a message was successful or not. Acknowledgement both on the producer and consumer side is an effective way of coping with that, since both parties are aware of the transport result and can act according to that. Thus, applying this crucial to achieve a high degree of reliability and availability.
+Similar to network protocols like TCP and UDP, there are different ways to communicate with a data system like Kafka. Following a fire-and-forget approach e.g. on the producer side, might result in a data loss, since the producer will never know whether the transport of a message was successful or not. Acknowledgement both on the producer and consumer side is an effective way of coping with that, since both parties are aware of the transport result and can act according to that. Thus, applying this is crucial to achieve a high degree of reliability and availability.
 
 A possible scenario:
 
