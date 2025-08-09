@@ -57,6 +57,24 @@ class DatabaseClient:
             logger.info("New MongoDB client created without authentication")
             return MongoClient(host=host, port=port)
 
+    def find_one(self, collection_name: str, query: dict[str, Any]) -> Any | None:
+        """Finds a single document in the specified collection.
+
+        Args:
+            collection_name (str): Name of the collection to search.
+            query (dict[str, Any]): Query to filter the documents.
+
+        Returns:
+            Any | None: The found document or None if not found.
+        """
+        collection = self._database[collection_name]
+        result = collection.find_one(query)
+        if result:
+            logger.info(f"Document found in collection {collection_name}: {result}")
+        else:
+            logger.info(f"No document found in collection {collection_name} for query: {query}")
+        return result
+
     def insert_one(self, collection_name: str, data: dict[str, Any]) -> Any | None:
         """Inserts a single document into the specified collection.
 
@@ -69,42 +87,9 @@ class DatabaseClient:
         """
 
         collection = self._database[collection_name]
-        try:
-            result = collection.insert_one(data)
-            logger.info(
-                f"Data has been inserted successfully into the collection {collection_name}"
-            )
-            return result.inserted_id
-        except Exception as e:
-            logger.error(
-                f"Failed to insert data into collection {collection_name}: {e}"
-            )
-
-    def insert_many(
-        self, collection_name: str, data: list[dict[str, Any]]
-    ) -> list[Any] | None:
-        """Inserts multiple datasets into the specified collection
-
-        Args:
-            collection_name (str): Name of the collection to insert data into
-            data (list[dict[str, Any]]): Data to be inserted as a dictionary
-
-        Returns:
-            list[Any] | None: List of IDs of the inserted documents. None if procedure fails
-        """
-
-        collection = self._database[collection_name]
-        try:
-            result = collection.insert_many(data)
-            logger.info(
-                f"Data have been inserted successfully into the collection {collection_name}"
-            )
-            return result.inserted_ids
-
-        except Exception as e:
-            logger.error(
-                f"Failed to insert data into collection {collection_name}: {e}"
-            )
+        result = collection.insert_one(data)
+        logger.info(f"Data has been inserted successfully into the collection {collection_name}")
+        return result.inserted_id
 
     def close(self) -> None:
         """Close database client connection"""
