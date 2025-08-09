@@ -196,7 +196,7 @@ MongoDB supports a concept called sharding. It's a way of replicating and distri
 
 ##### Replica Sets
 
-Similar to what Kafka offers with the replication factors, one can make use replica sets in MongoDB. 
+Similar to what Kafka offers with the replication factors, one can make use of replica sets in MongoDB. 
 Utilizing this feature will result in the replication of data across multiple physical instances.
 The concept of primary vs. secondary is comparable to leaders and followers in Kafka.
 
